@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TrilhaApiDesafio.Context;
+using TrilhaApiDesafio.InputViewModels;
 using TrilhaApiDesafio.Interfaces;
 using TrilhaApiDesafio.Models;
 
@@ -65,13 +66,19 @@ namespace TrilhaApiDesafio.Controllers
         }
 
         [HttpPost]
-        public IActionResult Criar(Tarefa tarefa)
+        public async Task<IActionResult> Criar([FromBody] CreateTarefaInputModel model)
         {
-            if (tarefa.Data == DateTime.MinValue)
-                return BadRequest(new { Erro = "A data da tarefa não pode ser vazia" });
+            if (ModelState.IsValid)
+            {
+                if (model.Data == DateTime.MinValue)
+                    return BadRequest(new { Erro = "A data da tarefa não pode ser vazia" });
 
-            // TODO: Adicionar a tarefa recebida no EF e salvar as mudanças (save changes)
-            return CreatedAtAction(nameof(ObterPorId), new { id = tarefa.Id }, tarefa);
+                var result = await _tarefaService.Criar(model);
+
+                return CreatedAtAction(nameof(ObterPorId), new { id = result.Id }, result);
+            }
+
+            return BadRequest("Verifique as informações digitadas."); 
         }
 
         [HttpPut("{id}")]
