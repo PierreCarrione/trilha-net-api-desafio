@@ -98,15 +98,18 @@ namespace TrilhaApiDesafio.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Deletar(int id)
+        public async Task<IActionResult> Deletar(int id)
         {
-            //var tarefaBanco = _context.Tarefas.Find(id);
+            try
+            {
+                var result = await _tarefaService.Deletar(id);
 
-            //if (tarefaBanco == null)
-            //    return NotFound();
-
-            // TODO: Remover a tarefa encontrada através do EF e salvar as mudanças (save changes)
-            return NoContent();
+                return Ok(result);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { mensagem = ex.Message });
+            }
         }
     }
 }

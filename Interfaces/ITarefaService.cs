@@ -7,6 +7,8 @@ namespace TrilhaApiDesafio.Interfaces
     public interface ITarefaService
     {
         Task<TarefaViewModel> ObterPorId(int id); 
-        Task<TarefaViewModel> Criar(CreateTarefaInputModel model); 
+        Task<TarefaViewModel> Criar(CreateTarefaInputModel model);
+
+        Task<string> Deletar(int id);
     }
 }

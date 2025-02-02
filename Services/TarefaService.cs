@@ -52,5 +52,16 @@ namespace TrilhaApiDesafio.Services
                 Status = tarefa.Status,
             };
         }
+
+        public async Task<string> Deletar(int id)
+        {
+            var tarefa = await _context.Tarefas.FindAsync(id)
+            ?? throw new KeyNotFoundException("Tarefa não encontrada.");
+
+            _context.Tarefas.Remove(tarefa);
+            await _context.SaveChangesAsync();
+
+            return "Tarefa excluída com sucesso!";
+        }
     }
 }
