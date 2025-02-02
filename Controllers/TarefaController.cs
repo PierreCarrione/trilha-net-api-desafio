@@ -66,7 +66,7 @@ namespace TrilhaApiDesafio.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Criar([FromBody] CreateTarefaInputModel model)
+        public async Task<IActionResult> Criar([FromBody] TarefaInputModel model)
         {
             if (ModelState.IsValid)
             {
@@ -82,19 +82,23 @@ namespace TrilhaApiDesafio.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Atualizar(int id, Tarefa tarefa)
+        public async Task<IActionResult> Atualizar(int id, [FromBody] TarefaInputModel model)
         {
-            //var tarefaBanco = _context.Tarefas.Find(id);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var result = await _tarefaService.Atualizar(id, model);
 
-            //if (tarefaBanco == null)
-            //    return NotFound();
+                    return CreatedAtAction(nameof(ObterPorId), new { id = result.Id }, result);
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    return NotFound(new { mensagem = ex.Message });
+                }
+            }
 
-            if (tarefa.Data == DateTime.MinValue)
-                return BadRequest(new { Erro = "A data da tarefa não pode ser vazia" });
-
-            // TODO: Atualizar as informações da variável tarefaBanco com a tarefa recebida via parâmetro
-            // TODO: Atualizar a variável tarefaBanco no EF e salvar as mudanças (save changes)
-            return Ok();
+            return BadRequest("Verifique as informações digitadas.");
         }
 
         [HttpDelete("{id}")]

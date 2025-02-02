@@ -2,7 +2,7 @@
 
 namespace TrilhaApiDesafio.InputViewModels
 {
-    public class CreateTarefaInputModel
+    public class TarefaInputModel
     {
         public string Titulo { get; set; }
         public string Descricao { get; set; }

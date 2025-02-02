@@ -16,7 +16,7 @@ namespace TrilhaApiDesafio.Services
             _context = context;
         }
 
-        public async Task<TarefaViewModel> Criar(CreateTarefaInputModel model)
+        public async Task<TarefaViewModel> Criar(TarefaInputModel model)
         {
             var entity = new Tarefa
             {
@@ -30,6 +30,29 @@ namespace TrilhaApiDesafio.Services
             await _context.SaveChangesAsync();
 
             return new TarefaViewModel {
+                Id = entity.Id,
+                Titulo = entity.Titulo,
+                Descricao = entity.Descricao,
+                Data = entity.Data,
+                Status = entity.Status,
+            };
+        }
+
+        public async Task<TarefaViewModel> Atualizar(int id, TarefaInputModel model)
+        {
+            var entity = await _context.Tarefas.FindAsync(id)
+            ?? throw new KeyNotFoundException("Tarefa não encontrada para atualizar.");
+
+            entity.Titulo = model.Titulo;
+            entity.Descricao = model.Descricao;
+            entity.Data = model.Data;
+            entity.Status = model.Status;
+
+            _context.Tarefas.Update(entity);
+            await _context.SaveChangesAsync();
+
+            return new TarefaViewModel
+            {
                 Id = entity.Id,
                 Titulo = entity.Titulo,
                 Descricao = entity.Descricao,
