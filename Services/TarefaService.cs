@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using TrilhaApiDesafio.Context;
 using TrilhaApiDesafio.InputViewModels;
 using TrilhaApiDesafio.Interfaces;
@@ -76,6 +78,20 @@ namespace TrilhaApiDesafio.Services
             };
         }
 
+        public async Task<IList<TarefaViewModel>> ObterTodos()
+        {
+            var tarefas = await _context.Tarefas.ToListAsync();
+
+            return tarefas.Select(tarefa => new TarefaViewModel
+            {
+                Id = tarefa.Id,
+                Titulo = tarefa.Titulo,
+                Descricao = tarefa.Descricao,
+                Data = tarefa.Data,
+                Status = tarefa.Status
+            }).ToList();
+        }
+
         public async Task<string> Deletar(int id)
         {
             var tarefa = await _context.Tarefas.FindAsync(id)
@@ -86,5 +102,7 @@ namespace TrilhaApiDesafio.Services
 
             return "Tarefa excluída com sucesso!";
         }
+
+
     }
 }

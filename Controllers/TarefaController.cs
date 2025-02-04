@@ -33,10 +33,11 @@ namespace TrilhaApiDesafio.Controllers
         }
 
         [HttpGet("ObterTodos")]
-        public IActionResult ObterTodos()
+        public async Task<IActionResult> ObterTodos()
         {
-            // TODO: Buscar todas as tarefas no banco utilizando o EF
-            return Ok();
+            var result = await _tarefaService.ObterTodos();
+
+            return Ok(result);
         }
 
         [HttpGet("ObterPorTitulo")]
