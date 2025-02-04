@@ -92,6 +92,21 @@ namespace TrilhaApiDesafio.Services
             }).ToList();
         }
 
+        public async Task<TarefaViewModel> ObterPorTitulo(string titulo)
+        {
+            var tarefa = await _context.Tarefas.Where(t => t.Titulo == titulo).FirstOrDefaultAsync()
+            ?? throw new KeyNotFoundException("Tarefa não encontrada.");
+
+            return new TarefaViewModel
+            {
+                Id = tarefa.Id,
+                Titulo = tarefa.Titulo,
+                Descricao = tarefa.Descricao,
+                Data = tarefa.Data,
+                Status = tarefa.Status,
+            };
+        }
+
         public async Task<string> Deletar(int id)
         {
             var tarefa = await _context.Tarefas.FindAsync(id)

@@ -11,5 +11,6 @@ namespace TrilhaApiDesafio.Interfaces
         Task<string> Deletar(int id);
         Task<TarefaViewModel> Atualizar(int id, TarefaInputModel model);
         Task<IList<TarefaViewModel>> ObterTodos();
+        Task<TarefaViewModel> ObterPorTitulo(string titulo);
     }
 }
