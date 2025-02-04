@@ -43,24 +43,17 @@ namespace TrilhaApiDesafio.Controllers
         [HttpGet("ObterPorTitulo")]
         public async Task<IActionResult> ObterPorTitulo(string titulo)
         {
-            try
-            {
-                var result = await _tarefaService.ObterPorTitulo(titulo);
+            var result = await _tarefaService.ObterPorTitulo(titulo);
 
-                return Ok(result);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { mensagem = ex.Message });
-            }
+            return Ok(result);
         }
 
         [HttpGet("ObterPorData")]
-        public IActionResult ObterPorData(DateTime data)
+        public async Task<IActionResult> ObterPorData(DateTime data)
         {
-            //var tarefa = _context.Tarefas.Where(x => x.Data.Date == data.Date);
-            //return Ok(tarefa);
-            return Ok();
+            var result = await _tarefaService.ObterPorData(data);
+
+            return Ok(result);
         }
 
         [HttpGet("ObterPorStatus")]
