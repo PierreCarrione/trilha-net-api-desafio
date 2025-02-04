@@ -57,13 +57,11 @@ namespace TrilhaApiDesafio.Controllers
         }
 
         [HttpGet("ObterPorStatus")]
-        public IActionResult ObterPorStatus(EnumStatusTarefa status)
+        public async Task<IActionResult> ObterPorStatus(EnumStatusTarefa status)
         {
-            // TODO: Buscar  as tarefas no banco utilizando o EF, que contenha o status recebido por parâmetro
-            // Dica: Usar como exemplo o endpoint ObterPorData
-            //var tarefa = _context.Tarefas.Where(x => x.Status == status);
-            //return Ok(tarefa);
-            return Ok();
+            var result = await _tarefaService.ObterPorStatus(status);
+
+            return Ok(result);
         }
 
         [HttpPost]

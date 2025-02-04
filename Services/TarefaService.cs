@@ -18,6 +18,77 @@ namespace TrilhaApiDesafio.Services
             _context = context;
         }
 
+        public async Task<TarefaViewModel> ObterPorId(int id)
+        {
+            var tarefa = await _context.Tarefas.FindAsync(id)
+            ?? throw new KeyNotFoundException("Tarefa não encontrada.");
+
+            return new TarefaViewModel
+            {
+                Id = tarefa.Id,
+                Titulo = tarefa.Titulo,
+                Descricao = tarefa.Descricao,
+                Data = tarefa.Data,
+                Status = tarefa.Status,
+            };
+        }
+
+        public async Task<IList<TarefaViewModel>> ObterTodos()
+        {
+            var tarefas = await _context.Tarefas.ToListAsync();
+
+            return tarefas.Select(tarefa => new TarefaViewModel
+            {
+                Id = tarefa.Id,
+                Titulo = tarefa.Titulo,
+                Descricao = tarefa.Descricao,
+                Data = tarefa.Data,
+                Status = tarefa.Status
+            }).ToList();
+        }
+
+        public async Task<IList<TarefaViewModel>> ObterPorTitulo(string titulo)
+        {
+            var tarefas = await _context.Tarefas.Where(t => t.Titulo == titulo).ToListAsync();
+
+            return tarefas.Select(tarefa => new TarefaViewModel
+            {
+                Id = tarefa.Id,
+                Titulo = tarefa.Titulo,
+                Descricao = tarefa.Descricao,
+                Data = tarefa.Data,
+                Status = tarefa.Status
+            }).ToList();
+        }
+
+        public async Task<IList<TarefaViewModel>> ObterPorData(DateTime data)
+        {
+            var tarefas = await _context.Tarefas.Where(t => t.Data.Date == data.Date).ToListAsync();
+
+            return tarefas.Select(tarefa => new TarefaViewModel
+            {
+                Id = tarefa.Id,
+                Titulo = tarefa.Titulo,
+                Descricao = tarefa.Descricao,
+                Data = tarefa.Data,
+                Status = tarefa.Status
+            }).ToList();
+        }
+
+        public async Task<IList<TarefaViewModel>> ObterPorStatus(EnumStatusTarefa status)
+        {
+            var tarefas = await _context.Tarefas.Where(t => t.Status == status).ToListAsync();
+
+            return tarefas.Select(tarefa => new TarefaViewModel
+            {
+                Id = tarefa.Id,
+                Titulo = tarefa.Titulo,
+                Descricao = tarefa.Descricao,
+                Data = tarefa.Data,
+                Status = tarefa.Status
+            }).ToList();
+        }
+
         public async Task<TarefaViewModel> Criar(TarefaInputModel model)
         {
             var entity = new Tarefa
@@ -63,62 +134,6 @@ namespace TrilhaApiDesafio.Services
             };
         }
 
-        public async Task<TarefaViewModel> ObterPorId(int id)
-        {
-            var tarefa = await _context.Tarefas.FindAsync(id)
-            ?? throw new KeyNotFoundException("Tarefa não encontrada.");
-
-            return new TarefaViewModel
-            {
-                Id = tarefa.Id,
-                Titulo = tarefa.Titulo,
-                Descricao = tarefa.Descricao,
-                Data = tarefa.Data,
-                Status = tarefa.Status,
-            };
-        }
-
-        public async Task<IList<TarefaViewModel>> ObterTodos()
-        {
-            var tarefas = await _context.Tarefas.ToListAsync();
-
-            return tarefas.Select(tarefa => new TarefaViewModel
-            {
-                Id = tarefa.Id,
-                Titulo = tarefa.Titulo,
-                Descricao = tarefa.Descricao,
-                Data = tarefa.Data,
-                Status = tarefa.Status
-            }).ToList();
-        }
-
-        public async Task<IList<TarefaViewModel>> ObterPorTitulo(string titulo)
-        {
-            var tarefas = await _context.Tarefas.Where(t => t.Titulo == titulo).ToListAsync();
-     
-            return tarefas.Select(tarefa => new TarefaViewModel
-            {
-                Id = tarefa.Id,
-                Titulo = tarefa.Titulo,
-                Descricao = tarefa.Descricao,
-                Data = tarefa.Data,
-                Status = tarefa.Status
-            }).ToList();
-        }
-        public async Task<IList<TarefaViewModel>> ObterPorData(DateTime data)
-        {
-            var tarefas = await _context.Tarefas.Where(t => t.Data.Date == data.Date).ToListAsync();
-
-            return tarefas.Select(tarefa => new TarefaViewModel
-            {
-                Id = tarefa.Id,
-                Titulo = tarefa.Titulo,
-                Descricao = tarefa.Descricao,
-                Data = tarefa.Data,
-                Status = tarefa.Status
-            }).ToList();
-        }
-
         public async Task<string> Deletar(int id)
         {
             var tarefa = await _context.Tarefas.FindAsync(id)
@@ -129,7 +144,5 @@ namespace TrilhaApiDesafio.Services
 
             return "Tarefa excluída com sucesso!";
         }
-
-
     }
 }
